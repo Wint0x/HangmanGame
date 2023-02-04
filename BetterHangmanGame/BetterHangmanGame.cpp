@@ -2,93 +2,6 @@
 
 using std::cout, std::cin, std::endl, std::getline, std::ws, std::string, std::vector;
 
-//Open file, fill vector with all words
-void readWords(wordlist& words)
-{
-	const string path = "words.txt";
-	std::ifstream read(path);
-
-	if (!read.is_open())
-	{
-		std::raise(SIGABRT);
-	}
-
-	string line;
-	while (!read.eof())
-	{
-		read >> line;
-		words.push_back(line);
-	}
-}
-
-std::string prepare_word(std::string word, std::unordered_map<int, char>& original_word_map)
-{
-	size_t len = word.length();
-	string new_word{};
-
-	for (auto& letter : word)
-	{
-		new_word += "_ ";
-	}
-
-	//Assign char at correct index
-	short original_index = 0;
-	for (short index = 0; index < new_word.length() - 1; ++index)
-	{
-		if (new_word[index] == '_')
-		{
-			original_word_map[index] = word[original_index];
-			++original_index;
-		}
-	}
-
-	//No initial letter display
-	if (len <= 4)
-	{
-		return new_word;
-	}
-
-	//Show only initial letter
-	else if (len >= 5 && len <= 8)
-	{
-		new_word[0] = word[0];
-
-		original_word_map.erase(original_word_map.begin()); //Remove first pair
-		return new_word;
-	}
-
-	//Show initial and last letter
-	else
-	{
-		new_word[0] = word[0];
-		new_word[new_word.length() - 2] = word[len - 1]; //-2 because last is a space
-		
-		original_word_map.erase(original_word_map.begin()); //Remove first and last pair
-		original_word_map.erase(--original_word_map.end());
-		return new_word;
-	}
-}
-
-std::ostringstream Join(wordlist& words, const std::string& delimiter)
-{
-	std::ostringstream oss;
-
-	for (size_t i = 0; i < words.size(); i++)
-	{
-		oss << words[i];
-		/*
-		Keeps adding the delimiter to the stream until we reach the
-		last element of the vector.
-		(We don't want to add a delimiter after the last element).
-		*/
-		if (i != words.size() - 1)
-		{
-			oss << delimiter;
-		}
-	}
-	return oss;
-}
-
 static const string MENU = "1) Play.\n2) View guessed words.\n3) Exit.\n--> ";
 
 int main()
@@ -284,4 +197,91 @@ int main()
 	}
 
 	return 0;
+}
+
+//Open file, fill vector with all words
+void readWords(wordlist& words)
+{
+	const string path = "words.txt";
+	std::ifstream read(path);
+
+	if (!read.is_open())
+	{
+		std::raise(SIGABRT);
+	}
+
+	string line;
+	while (!read.eof())
+	{
+		read >> line;
+		words.push_back(line);
+	}
+}
+
+std::string prepare_word(std::string word, std::unordered_map<int, char>& original_word_map)
+{
+	size_t len = word.length();
+	string new_word{};
+
+	for (auto& letter : word)
+	{
+		new_word += "_ ";
+	}
+
+	//Assign char at correct index
+	short original_index = 0;
+	for (short index = 0; index < new_word.length() - 1; ++index)
+	{
+		if (new_word[index] == '_')
+		{
+			original_word_map[index] = word[original_index];
+			++original_index;
+		}
+	}
+
+	//No initial letter display
+	if (len <= 4)
+	{
+		return new_word;
+	}
+
+	//Show only initial letter
+	else if (len >= 5 && len <= 8)
+	{
+		new_word[0] = word[0];
+
+		original_word_map.erase(original_word_map.begin()); //Remove first pair
+		return new_word;
+	}
+
+	//Show initial and last letter
+	else
+	{
+		new_word[0] = word[0];
+		new_word[new_word.length() - 2] = word[len - 1]; //-2 because last is a space
+		
+		original_word_map.erase(original_word_map.begin()); //Remove first and last pair
+		original_word_map.erase(--original_word_map.end());
+		return new_word;
+	}
+}
+
+std::ostringstream Join(wordlist& words, const std::string& delimiter)
+{
+	std::ostringstream oss;
+
+	for (size_t i = 0; i < words.size(); i++)
+	{
+		oss << words[i];
+		/*
+		Keeps adding the delimiter to the stream until we reach the
+		last element of the vector.
+		(We don't want to add a delimiter after the last element).
+		*/
+		if (i != words.size() - 1)
+		{
+			oss << delimiter;
+		}
+	}
+	return oss;
 }
