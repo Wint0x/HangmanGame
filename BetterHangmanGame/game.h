@@ -10,11 +10,12 @@
 
 #include <fstream>
 
+using std::cout, std::cin, std::endl, std::getline, std::ws, std::string, std::vector;
 typedef std::vector<std::string> wordlist;
 
 void readWords(wordlist&);
 std::string prepare_word(std::string word, std::unordered_map<int,char>&);
-std::ostringstream joinStrings(wordlist&, const std::string&);
+std::ostringstream Join(wordlist&, const std::string&);
 
 void signal_handler(int sig_num)
 {
