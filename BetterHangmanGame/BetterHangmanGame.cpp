@@ -1,6 +1,5 @@
 #include "game.h"
 
-using std::cout, std::cin, std::endl, std::getline, std::ws, std::string, std::vector;
 
 static const string MENU = "1) Play.\n2) View guessed words.\n3) Exit.\n--> ";
 
